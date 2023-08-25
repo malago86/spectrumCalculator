@@ -64,22 +64,35 @@ li {
     line-height: 1.5em;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #555;
+    color: white;
+    font-size: 110%;
+    text-transform: uppercase;
+    letter-spacing: 2%;
+}
+
 #input {
     float: left;
     font-size: 18px;
-    margin: 10px;
+    margin-left: 10px;
 }
 
 #input input,
 #input select {
     font-size: 18px;
-    width: 150px;
+    width: 80%;
     padding: 1px;
 }
 
 #input table td {
     padding: 2px;
     text-align: center;
+    width: 175px;
 }
 
 #input input[type=button] {
@@ -99,6 +112,13 @@ li {
 
 #output table {
     font-size: 70%;
+}
+
+#output table td,
+#output table th {
+    padding: 3px;
+    border: 1px solid #555;
+    text-align: center;
 }
 
 #plot {

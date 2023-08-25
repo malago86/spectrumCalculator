@@ -162,15 +162,15 @@ function calculate() {
     
 
 function generateTable(data) {
-    outputTable = "<table><tr>";
+    outputTable = "<table><thead><tr>";
     for (key in data) {
         outputTable += "<th>"+key+"</th>";
     }
-    outputTable += "</tr>";
+    outputTable += "</tr></thead>";
     data["keV"].forEach(function (e,i) {
         outputTable += "<tr>";
         for (key in data) {
-            outputTable += "<td>" + Number(data[key][i]).toPrecision(3) + "</td>";
+            outputTable += "<td>" + Number(data[key][i]).toPrecision(4) + "</td>";
         }
         outputTable += "</tr>";
     });
