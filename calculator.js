@@ -1,5 +1,5 @@
 var data = {};
-var dataFiles = ["dataMu", "dataAirKerma", "dataRaw"];
+var dataFiles = ["dataMu", "dataAirKerma", "dataMolybdenum","dataRhodium","dataTungsten"];
 var wto = null;
 var downloadData = "";
 $(document).ready(function () {
@@ -24,6 +24,10 @@ $(document).ready(function () {
     $("input").on("input", function () {
         if($(this).val()!="")
             calculate();
+    })
+
+    $("select").on("change", function () {
+        calculate();
     })
 
     $("#calculate").click(function () {
@@ -63,8 +67,10 @@ function calculate() {
         additional.push(k.slice(1));
     });
 
-    idx = data["dataRaw"][0].indexOf(kVp);
-    data["dataRaw"].slice(1).forEach(function (ed, i) {
+    anode = $("#anodeMaterial").val();
+
+    idx = data["data"+anode][0].indexOf(kVp);
+    data["data"+anode].slice(1).forEach(function (ed, i) {
         prod = 1;
         inherent.forEach(function (ei) {
             prod *= ei[i];
@@ -76,7 +82,7 @@ function calculate() {
 
     totalmGy = output["mGy"].reduce((partialSum, a) => partialSum + a, 0);
 
-    data["dataRaw"].slice(1).forEach(function (ed, i) {
+    data["data"+anode].slice(1).forEach(function (ed, i) {
         output["normalizedFluence"].push(output["relativeFluence"][i] / totalmGy * airKerma);
         prod = 1;
         additional.forEach(function (ei) {
