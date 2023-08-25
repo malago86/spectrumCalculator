@@ -1,5 +1,12 @@
 var data = {};
 var dataFiles = ["dataMu", "dataAirKerma", "dataRaw"];
+output = {
+    "keV":[],
+    "relativeFluence": [],
+    "mGy": [],
+    "normalizedFluence": [],
+    "fluence":[]
+}
 $(document).ready(function () {
     for (f in dataFiles) {
         $.ajax({
@@ -38,13 +45,6 @@ $(document).ready(function () {
             });
             additional.push(k.slice(1));
         });
-        output = {
-            "keV":[],
-            "relativeFluence": [],
-            "mGy": [],
-            "normalizedFluence": [],
-            "fluence":[]
-        }
 
         idx = data["dataRaw"][0].indexOf(kVp);
         data["dataRaw"].slice(1).forEach(function (ed, i) {
@@ -52,7 +52,7 @@ $(document).ready(function () {
             inherent.forEach(function (ei) {
                 prod *= ei[i];
             });
-            output["keV"].push(ed[0]);
+            output["keV"].push(Number(ed[0]));
             output["relativeFluence"].push(ed[idx] * prod);
             output["mGy"].push(ed[idx] * prod * data["dataAirKerma"].slice(1)[i][2]);
         });
@@ -71,6 +71,23 @@ $(document).ready(function () {
         table = generateTable(output);
 
         $("#output").html(table);
+
+        plotElement = document.getElementById('plot');
+        Plotly.newPlot( plotElement, [{
+            x: output["keV"],
+            y: output["normalizedFluence"]
+        }],
+            {
+                margin: { t: 0 },
+                title: "fluence",
+                yaxis: {
+                    title:"Normalized Fluence (photons/mm^2)"
+                },
+                xaxis: {
+                    title: "Energy (keV)",
+                    range: [0, 50]
+                }
+            });
             // relativeFluence.append(dataRaw[str(kVp)][idx] *
             //                     np.prod([f[idx] for f in inherent]))
             // mGy.append(relativeFluence[-1] * dataAirKerma["kerma/fluence"].values[idx])
