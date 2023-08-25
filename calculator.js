@@ -1,5 +1,6 @@
 var data = {};
-var dataFiles = ["dataMu", "dataAirKerma", "dataMolybdenum","dataRhodium","dataTungsten"];
+var dataFiles = ["dataMu", "dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
+var symbols={"Tungsten":"W","Molybdenum":"Mo","Rhodium":"Rh"};
 var wto = null;
 var downloadData = "";
 $(document).ready(function () {
@@ -139,7 +140,19 @@ function calculate() {
             }
     );
     $("#download").click(function () {
-        download(downloadData, "spectrum.csv");
+        filename = symbols[$("#anodeMaterial").val()] + $("#kVp").val() + "kVp";
+        $(".inherent").each(function (i, e) {
+            material = e.id.split("-")[0];
+            if (e.value > 0)
+                filename += "_" + material + e.value * 1000 + "um";
+        });
+        additional = [];
+        $(".additional").each(function (i, e) {
+            material = e.id.split("-")[0];
+            if (e.value > 0)
+                filename += "_" + material + e.value * 1000 + "um";
+        });
+        download(downloadData, filename+".csv");
     })
 };
     
