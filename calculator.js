@@ -28,11 +28,22 @@ $(document).ready(function () {
             });
             inherent.push(k.slice(1));
         });
+        additional = [];
+        $(".additional").each(function (i, e) {
+            material = e.id.split("-")[0];
+            idx = data["dataMu"][0].indexOf(material);
+            k = [];
+            data["dataMu"].forEach(function (ed) {
+                k.push(Math.exp(-ed[idx] * e.value));
+            });
+            additional.push(k.slice(1));
+        });
         output = {
             "keV":[],
             "relativeFluence": [],
             "mGy": [],
-            "normalizedFluence":[]
+            "normalizedFluence": [],
+            "fluence":[]
         }
 
         idx = data["dataRaw"][0].indexOf(kVp);
@@ -50,6 +61,11 @@ $(document).ready(function () {
 
         data["dataRaw"].slice(1).forEach(function (ed, i) {
             output["normalizedFluence"].push(output["relativeFluence"][i] / totalmGy * airKerma);
+            prod = 1;
+            additional.forEach(function (ei) {
+                prod *= ei[i];
+            });
+            output["fluence"].push((output["relativeFluence"][i] / totalmGy * airKerma)*prod);
         });
 
         table = generateTable(output);
