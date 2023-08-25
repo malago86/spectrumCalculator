@@ -76,6 +76,11 @@ thead {
     letter-spacing: 2%;
 }
 
+#content {
+    max-width: 1024px;
+    margin: auto
+}
+
 #input {
     float: left;
     font-size: 18px;
