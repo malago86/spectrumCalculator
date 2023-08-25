@@ -18,31 +18,6 @@ body {
     margin: 0;
 }
 
-.simple-container {
-    max-width: 675px;
-    margin: 0 auto;
-    padding-top: 70px;
-    padding-bottom: 20px;
-}
-
-.simple-print {
-    fill: white;
-    stroke: white;
-}
-
-.simple-print svg {
-    height: 100%;
-}
-
-.simple-close {
-    color: white;
-    border-color: white;
-}
-
-.simple-ext-info {
-    border-top: 1px solid #aaa;
-}
-
 p {
     font-size: 16px;
 }
@@ -93,30 +68,17 @@ li {
     line-height: 1.5em;
 }
 
-aside,
-[class *="sidebar"],
-[id *="sidebar"] {
-    max-width: 90%;
-    margin: 0 auto;
-    border: 1px solid lightgrey;
-    padding: 5px 15px;
-}
-
-@media (min-width: 1921px) {
-    body {
-        font-size: 18px;
-    }
-}
-
 #input {
     float: left;
     font-size: 18px;
     margin: 10px;
 }
 
-#input input {
+#input input,
+#input select {
     font-size: 18px;
     width: 150px;
+    padding: 1px;
 }
 
 #input table td {
