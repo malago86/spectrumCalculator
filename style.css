@@ -1,40 +1,149 @@
-html,
-body {
-    margin: 0;
-    padding: 10;
+@import 'https://fonts.googleapis.com/css?family=Open+Sans';
+
+:root {
+    color-scheme: light dark;
+}
+
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-    color: #292929;
-    font: 90% Roboto, Arial, sans-serif;
-    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.75em;
+    font-size: 16px;
+    background-color: #222;
+    color: white;
+    margin: 0;
+}
+
+.simple-container {
+    max-width: 675px;
+    margin: 0 auto;
+    padding-top: 70px;
+    padding-bottom: 20px;
+}
+
+.simple-print {
+    fill: white;
+    stroke: white;
+}
+
+.simple-print svg {
+    height: 100%;
+}
+
+.simple-close {
+    color: white;
+    border-color: white;
+}
+
+.simple-ext-info {
+    border-top: 1px solid #aaa;
 }
 
 p {
-    padding: 0 10px;
-    line-height: 1.8;
+    font-size: 16px;
 }
 
-ul li {
-    padding-right: 10px;
-    line-height: 1.6;
+h1 {
+    font-size: 30px;
+    line-height: 34px;
+    background-color: #1f77b4;
+    padding: 20px;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: 20px;
+    line-height: 25px;
 }
 
 h3 {
-    padding: 5px 20px;
-    margin: 0;
+    font-size: 16px;
+    line-height: 27px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #D8D8D8;
+    border-top: 1px solid #D8D8D8;
+}
+
+hr {
+    height: 1px;
+    background-color: #d8d8d8;
+    border: none;
+    width: 100%;
+    margin: 0px;
+}
+
+a[href] {
+    color: #1e8ad6;
+}
+
+a[href]:hover {
+    color: #3ba0e6;
+}
+
+img {
+    max-width: 100%;
+}
+
+li {
+    line-height: 1.5em;
+}
+
+aside,
+[class *="sidebar"],
+[id *="sidebar"] {
+    max-width: 90%;
+    margin: 0 auto;
+    border: 1px solid lightgrey;
+    padding: 5px 15px;
+}
+
+@media (min-width: 1921px) {
+    body {
+        font-size: 18px;
+    }
 }
 
 #input {
-    float: left
+    float: left;
+    font-size: 18px;
+    margin: 10px;
+}
+
+#input input {
+    font-size: 18px;
+    width: 150px;
+}
+
+#input table td {
+    padding: 2px;
+    text-align: center;
+}
+
+#input input[type=button] {
+    cursor: pointer;
+    margin: auto;
+    display: block;
+    padding: 5px;
+    width: 50%;
 }
 
 #output {
     float: left;
     height: 400px;
-    overflow: scroll;
+    overflow-y: scroll;
+    margin-left: 20px
+}
+
+#output table {
+    font-size: 70%;
 }
 
 #plot {
     clear: both;
+    margin: 10px;
 }

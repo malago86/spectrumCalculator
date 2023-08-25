@@ -106,16 +106,29 @@ function calculate() {
                 margin: { t: 0 },
                 title: "fluence",
                 yaxis: {
-                    title: "Normalized Fluence (photons/mm^2)"
+                    automargin: true,
+                    title: {
+                        text: "Fluence (photons/mm²)",
+                        standoff: 30
+                    },
+                    linecolor: "white",
+                    
                 },
                 xaxis: {
                     title: "Energy (keV)",
-                    range: [0, 50]
+                    range: [0, 50],
+                    linecolor:"white"
                 },
                 legend: {
                     xanchor: 'right',
                     y: .9
-                }
+                },
+                font: {
+                    size: 20,
+                    color: 'white'
+                },
+                plot_bgcolor: '#222',
+                paper_bgcolor: '#222'
             }
         );
     // }else {
