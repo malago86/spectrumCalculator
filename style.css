@@ -95,28 +95,36 @@ thead {
     width: 175px;
 }
 
-#input input[type=button] {
+input[type=button] {
     cursor: pointer;
     margin: auto;
     display: block;
     padding: 5px;
     width: 50%;
+    font-size: 18px;
+    text-transform: uppercase;
 }
 
 #output {
     float: left;
     height: 400px;
-    overflow-y: scroll;
     margin-left: 20px
 }
 
-#output table {
-    font-size: 70%;
+#output #table {
+    overflow-y: scroll;
+    height: 90%;
+    margin-bottom: 10px
 }
 
-#output table td,
-#output table th {
-    padding: 3px;
+#output #table {
+    font-size: 70%;
+    ;
+}
+
+#output #table td,
+#output #table th {
+    padding: 1px;
     border: 1px solid #555;
     text-align: center;
 }

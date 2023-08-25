@@ -1,6 +1,7 @@
 var data = {};
 var dataFiles = ["dataMu", "dataAirKerma", "dataRaw"];
 var wto = null;
+var downloadData = "";
 $(document).ready(function () {
     promises = []
     for (f in dataFiles) {
@@ -86,7 +87,7 @@ function calculate() {
 
     table = generateTable(output);
 
-    $("#output").html(table);
+    $("#output #table").html(table);
 
     // plotElement = document.getElementById('plot');
     // plotElement.innerHTML = "";
@@ -130,52 +131,44 @@ function calculate() {
                 plot_bgcolor: '#222',
                 paper_bgcolor: '#222'
             }
-        );
-    // }else {
-    //     Plotly.animate("plot",
-    //         {
-    //             data:[{y: output["normalizedFluence"]}]
-    //         },
-    //         {
-    //             margin: { t: 0 },
-    //             title: "fluence",
-    //             yaxis: {
-    //                 title: "Normalized Fluence (photons/mm^2)"
-    //             },
-    //             xaxis: {
-    //                 title: "Energy (keV)",
-    //                 range: [0, 50]
-    //             }
-    //         },
-    //         {
-    //             transition: {
-    //                 duration: 500,
-    //                 easing: 'cubic-in-out'
-    //             },
-    //             frame: {
-    //                 duration: 500
-    //             }
-    //         }
-    //     );
-    // }
+    );
+    $("#download").click(function () {
+        download(downloadData, "spectrum.csv");
+    })
 };
     
 
 function generateTable(data) {
-    outputTable = "<table><thead><tr>";
+    outputTable = "<thead><tr>";
+    downloadData=[Object.keys(data).join(",")];
     for (key in data) {
-        outputTable += "<th>"+key+"</th>";
+        outputTable += "<th>" + key + "</th>";
     }
     outputTable += "</tr></thead>";
     data["keV"].forEach(function (e,i) {
         outputTable += "<tr>";
+        r = [];
         for (key in data) {
             outputTable += "<td>" + Number(data[key][i]).toPrecision(4) + "</td>";
+            r.push(Number(data[key][i]));
         }
         outputTable += "</tr>";
+        downloadData.push(r.join(","))
     });
 
-    outputTable += "</table>";
+    downloadData = downloadData.join("\n");
 
     return outputTable;
+}
+
+function download(content, filename)
+{
+    contentType = 'application/octet-stream';
+    data = "";
+
+    var a = document.createElement('a');
+    var blob = new Blob([content], {'type':contentType});
+    a.href = window.URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
 }
