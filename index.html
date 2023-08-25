@@ -1,0 +1,98 @@
+<head>
+    <title>Spectrum calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
+        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="calculator.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h2>Spectrum calculator</h2>
+
+    <div id="input">
+        <table class="tg">
+            <thead>
+                <tr>
+                    <th class="tg-0lax">Material</th>
+                    <th class="tg-0lax">Inherent Value</th>
+                    <th class="tg-0lax">Added Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="tg-0lax">Al</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Al-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Al-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Cu</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Cu-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Cu-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Mo</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Mo-1" value="0.025"></td>
+                    <td class="tg-0lax"><input type="number" id="Mo-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Rh</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Rh-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Rh-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Ag</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Ag-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Ag-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Ti</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Ti-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Ti-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">Sn</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="Sn-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="Sn-2" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">PC</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="PC-1" value="4"></td>
+                    <td class="tg-0lax"><input type="number" id="PC-1" value="0"></td>
+                </tr>
+                <tr>
+                    <td class="tg-0lax">GT</td>
+                    <td class="tg-0lax"><input type="number" class="inherent" id="GT-1" value="0"></td>
+                    <td class="tg-0lax"><input type="number" id="GT-1" value="0"></td>
+                </tr>
+                <tr>
+                    <td>kVp</td>
+                    <td class="tg-0lax"><input type="number" id="kVp" value="30"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Air Kerma</td>
+                    <td class="tg-0lax"><input type="number" id="airKerma" value="1.0"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Detector material</td>
+                    <td class="tg-0lax"><input type="text" id="detMaterial" value="Molybdenum"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><input type="button" id="calculate" value="Calculate"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="output">
+
+    </div>
+
+</body>
