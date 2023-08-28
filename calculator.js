@@ -140,19 +140,33 @@ function calculate() {
             }
     );
     $("#download").click(function () {
-        filename = symbols[$("#anodeMaterial").val()] + $("#kVp").val() + "kVp";
-        $(".inherent").each(function (i, e) {
-            material = e.id.split("-")[0];
-            if (e.value > 0)
-                filename += "_" + material + e.value * 1000 + "um";
+        download(downloadData, getFileName()+".csv");
+    })
+
+    $("#downloadMCGPU").click(function () {
+        outputMCGPU = `#
+#
+#  Spectrum generated using DIDSR's online tool:
+#    https://malago86.github.io/spectrumCalculator/
+#
+#  based on data from:
+#    Hernandez, A.M., Seibert, J.A., Nosratieh, A. 
+#    and Boone, J.M. (2017), Generation and analysis 
+#    of clinically relevant breast imaging x-ray 
+#    spectra. Med. Phys., 44: 2148-2160. 
+#    https://doi.org/10.1002/mp.12222
+#
+#  Energy [eV]    Num. photons/(mm^2*keV)
+# ----------------------------------------------------
+`
+        output["keV"].forEach(function (e, i) {
+            if (output["fluence"][i] != 0) {
+                ph = i==output["keV"].length-1 || output["fluence"][i+1] == 0 ? -output["fluence"][i]: output["fluence"][i];
+                outputMCGPU += (output["keV"][i] * 1000) + " " + String((ph/output["keV"][i]).toFixed(3)).padStart(10) + "\n";
+            }
         });
-        additional = [];
-        $(".additional").each(function (i, e) {
-            material = e.id.split("-")[0];
-            if (e.value > 0)
-                filename += "_" + material + e.value * 1000 + "um";
-        });
-        download(downloadData, filename+".csv");
+        outputMCGPU = outputMCGPU.slice(0, outputMCGPU.length - 1); // remove last \n
+        download(outputMCGPU, getFileName()+".spc");
     })
 };
     
@@ -178,6 +192,22 @@ function generateTable(data) {
     downloadData = downloadData.join("\n");
 
     return outputTable;
+}
+
+function getFileName() {
+    filename=symbols[$("#anodeMaterial").val()] + $("#kVp").val() + "kVp";
+    $(".inherent").each(function (i, e) {
+        material = e.id.split("-")[0];
+        if (e.value > 0)
+            filename += "_" + material + e.value * 1000 + "um";
+    });
+    additional = [];
+    $(".additional").each(function (i, e) {
+        material = e.id.split("-")[0];
+        if (e.value > 0)
+            filename += "_" + material + e.value * 1000 + "um";
+    });
+    return filename;
 }
 
 function download(content, filename)
