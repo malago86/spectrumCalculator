@@ -40,10 +40,12 @@ $(document).ready(function () {
 function calculate() {
     output = {
         "keV": [],
-        "relativeFluence": [],
+        "relFluence": [],
         "mGy": [],
-        "normalizedFluence": [],
-        "fluence": []
+        "normFluence": [],
+        "meanEnergy":[],
+        "fluence": [],
+        "mGy2":[]
     }
     kVp = $("#kVp").val();
     airKerma = $("#airKerma").val();
@@ -77,19 +79,22 @@ function calculate() {
             prod *= ei[i];
         });
         output["keV"].push(Number(ed[0]));
-        output["relativeFluence"].push(ed[idx] * prod);
+        output["relFluence"].push(ed[idx] * prod);
         output["mGy"].push(ed[idx] * prod * data["dataAirKerma"].slice(1)[i][2]);
     });
 
     totalmGy = output["mGy"].reduce((partialSum, a) => partialSum + a, 0);
 
     data["data"+anode].slice(1).forEach(function (ed, i) {
-        output["normalizedFluence"].push(output["relativeFluence"][i] / totalmGy * airKerma);
+        output["normFluence"].push(output["relFluence"][i] / totalmGy * airKerma);
+        output["meanEnergy"].push(output["relFluence"][i] / totalmGy * airKerma * ed[0])
         prod = 1;
         additional.forEach(function (ei) {
             prod *= ei[i];
         });
-        output["fluence"].push((output["relativeFluence"][i] / totalmGy * airKerma) * prod);
+        fluence = (output["relFluence"][i] / totalmGy * airKerma) * prod;
+        output["fluence"].push(fluence);
+        output["mGy2"].push(fluence * data["dataAirKerma"].slice(1)[i][2]);
     });
 
     table = generateTable(output);
@@ -102,7 +107,7 @@ function calculate() {
 
         Plotly.newPlot("plot", [{
             x: output["keV"],
-            y: output["normalizedFluence"],
+            y: output["normFluence"],
             name:"Normalized Fluence"
         },
         {
@@ -173,7 +178,14 @@ function calculate() {
     
 
 function generateTable(data) {
-    outputTable = "<thead><tr>";
+    outputTable = "<table style='width:100%'>";
+    outputTable += "<tr><th width='50%'>Total fluence (photons/mm²)</th><td>" + output["normFluence"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
+    outputTable += "<tr><th>Air Kerma (mGy)</th><td>" + output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
+    outputTable += "<tr><th>Avg. Energy (keV)</th><td>"+(output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0)/output["normFluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3)+"</td></tr>";
+    //<th>Air Kerma (mGy)</th><th>HVL (mm Al)</th><th>Avg. Energy (keV)</th><th>Eff. Energy (keV)</th>
+    outputTable += "</table>";
+
+    outputTable += "<table><thead><tr>";
     downloadData=[Object.keys(data).join(",")];
     for (key in data) {
         outputTable += "<th>" + key + "</th>";
@@ -183,17 +195,20 @@ function generateTable(data) {
         outputTable += "<tr>";
         r = [];
         for (key in data) {
-            outputTable += "<td>" + Number(data[key][i]).toPrecision(4) + "</td>";
+            outputTable += "<td>" + Number(data[key][i]).toPrecision(3) + "</td>";
             r.push(Number(data[key][i]));
         }
         outputTable += "</tr>";
         downloadData.push(r.join(","))
     });
 
+    outputTable += "</table>";
+
     downloadData = downloadData.join("\n");
 
     return outputTable;
 }
+
 
 function getFileName() {
     filename=symbols[$("#anodeMaterial").val()] + $("#kVp").val() + "kVp";

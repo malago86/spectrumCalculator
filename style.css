@@ -68,7 +68,7 @@ table {
     border-collapse: collapse;
 }
 
-thead {
+th {
     background-color: #555;
     color: white;
     font-size: 110%;
@@ -84,7 +84,6 @@ thead {
 #input {
     float: left;
     font-size: 18px;
-    margin-left: 10px;
 }
 
 #input input,
@@ -111,18 +110,18 @@ input[type=button] {
 #output {
     float: left;
     height: 400px;
-    margin-left: 20px
+    margin-left: 5px
 }
 
 #output #table {
     overflow-y: scroll;
     height: 90%;
-    margin-bottom: 10px
 }
 
-#output #table {
+#output #table table {
+
+    margin-bottom: 10px;
     font-size: 70%;
-    ;
 }
 
 #output #table td,
