@@ -111,8 +111,9 @@ function calculate() {
             name:"Fluence"
         }],
             {
+                height: 350,
                 margin: { t: 0 },
-                title: "fluence",
+                // title: "fluence",
                 yaxis: {
                     automargin: true,
                     title: {
@@ -149,7 +150,7 @@ function calculate() {
 #  Spectrum generated using DIDSR's online tool:
 #    https://malago86.github.io/spectrumCalculator/
 #
-#  based on data from:
+#  Based on data from:
 #    Hernandez, A.M., Seibert, J.A., Nosratieh, A. 
 #    and Boone, J.M. (2017), Generation and analysis 
 #    of clinically relevant breast imaging x-ray 

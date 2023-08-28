@@ -41,12 +41,12 @@
                     </tr>
                     <tr>
                         <td>Mo</td>
-                        <td><input type="number" class="inherent" id="Mo-1" value="0.025"></td>
+                        <td><input type="number" class="inherent" id="Mo-1" value="0"></td>
                         <td><input type="number" class="additional" id="Mo-2" value="0"></td>
                     </tr>
                     <tr>
                         <td>Rh</td>
-                        <td><input type="number" class="inherent" id="Rh-1" value="0"></td>
+                        <td><input type="number" class="inherent" id="Rh-1" value="0.05"></td>
                         <td><input type="number" class="additional" id="Rh-2" value="0"></td>
                     </tr>
                     <tr>
@@ -76,7 +76,7 @@
                     </tr>
                     <tr>
                         <td>Tube Potential (kV)</td>
-                        <td><input type="number" id="kVp" value="30"></td>
+                        <td><input type="number" id="kVp" value="29"></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -89,7 +89,7 @@
                         <td><select id="anodeMaterial" name="anodeMaterial">
                                 <option value="Molybdenum">Molybdenum</option>
                                 <option value="Rhodium">Rhodium</option>
-                                <option value="Tungsten">Tungsten</option>
+                                <option value="Tungsten" selected="selected">Tungsten</option>
                                 <!-- <option value="TungstenBCT">Tungsten (BCT)</option> -->
                             </select></td>
                         <td></td>
@@ -111,9 +111,7 @@
                     type="button" id="downloadMCGPU" value=".spc" title="Spectrum file for MC-GPU"></td>
             </div>
         </div>
-        <br>
         <hr>
-        <br>
         <div id="plot"></div>
     </div>
 </body>
