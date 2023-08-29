@@ -4,6 +4,9 @@ var symbols={"Tungsten":"W","Molybdenum":"Mo","Rhodium":"Rh"};
 var wto = null;
 var downloadData = "";
 var binSize = 0.25;
+
+urlParams = new URLSearchParams(window.location.search);
+
 $(document).ready(function () {
     promises = []
     for (f in dataFiles) {
@@ -19,17 +22,26 @@ $(document).ready(function () {
         });
         promises.push(req);
     }
-    $.when.apply(null,promises).done(e => {
+    $.when.apply(null, promises).done(e => {
+        entries = urlParams.entries();
+        for (const entry of entries) {
+            key = entry[0];
+            val = entry[1];
+            $("#"+key).val(val);
+        }
         calculate();
     })
 
     $("input").on("input", function () {
-        if($(this).val()!="")
+        if ($(this).val() != "") {
             calculate();
+            getURL();
+        }
     })
 
     $("select").on("change", function () {
         calculate();
+        getURL();
     })
 
     $("#calculate").click(function () {
@@ -151,8 +163,7 @@ function calculate() {
     })
 
     $("#downloadMCGPU").click(function () {
-        outputMCGPU = `#
-#
+        outputMCGPU = `#----------------------------------------------------
 #  Spectrum generated using DIDSR's online tool:
 #    https://malago86.github.io/spectrumCalculator/
 #
@@ -249,4 +260,20 @@ function download(content, filename)
     a.href = window.URL.createObjectURL(blob);
     a.download = filename;
     a.click();
+}
+
+function getURL() {
+    urlParams = new URLSearchParams();
+    $("input").each(function (i, e) {
+        console.log(e.id, e.value);
+        if (!isNaN(e.value) && e.value != 0)
+            urlParams.set(e.id,Number(e.value));
+    });
+    $("select").each(function (i, e) {
+        urlParams.set(e.id,$(e).find(":selected").val());
+    });
+    let url = window.location.origin + window.location.pathname + '?' + encodeURI(urlParams);
+    
+    window.history.replaceState(window.history.state, window.document.title, url);
+    // window.location.search = urlParams;
 }
