@@ -36,6 +36,9 @@ $(document).ready(function () {
         if ($(this).val() != "") {
             calculate();
             getURL();
+            // $(this).val(Number($(this).val()));
+        } else {
+            $(this).val(0);
         }
     })
 
