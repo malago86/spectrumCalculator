@@ -79,7 +79,7 @@ function calculate() {
         idx = data["dataMu"][0].indexOf(material);
         k = [];
         data["dataMu"].forEach(function (ed) {
-            k.push(Math.exp(-ed[idx] * e.value?e.value:0));
+            k.push(Math.exp(-ed[idx] * e.value));
         });
         inherent.push(k.slice(1));
     });
@@ -89,7 +89,7 @@ function calculate() {
         idx = data["dataMu"][0].indexOf(material);
         k = [];
         data["dataMu"].forEach(function (ed) {
-            k.push(Math.exp(-ed[idx] * e.value?e.value:0));
+            k.push(Math.exp(-ed[idx] * e.value));
         });
         additional.push(k.slice(1));
     });
@@ -208,7 +208,8 @@ function generateTable(data) {
     outputTable = "<table style='width:100%'>";
     outputTable += "<tr><th width='50%'>Total fluence (photons/mm²)</th><td>" + output["normFluence"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
     outputTable += "<tr><th>Air Kerma (mGy)</th><td>" + output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
-    outputTable += "<tr><th>Avg. Energy (keV)</th><td>"+(output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0)/output["normFluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3)+"</td></tr>";
+    outputTable += "<tr><th>Avg. Energy (keV)</th><td>" + (output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0) / output["normFluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3) + "</td></tr>";
+    outputTable += "<tr><th>HVL (mm Al)</th><td>"+getHVL().toPrecision(3)+"</td></tr>";
     //<th>Air Kerma (mGy)</th><th>HVL (mm Al)</th><th>Avg. Energy (keV)</th><th>Eff. Energy (keV)</th>
     outputTable += "</table>";
 
@@ -276,7 +277,6 @@ function download(content, filename)
 function getURL() {
     urlParams = new URLSearchParams();
     $("input").each(function (i, e) {
-        console.log(e.id, e.value);
         if (!isNaN(e.value) && e.value != 0)
             urlParams.set(e.id,Number(e.value));
     });
@@ -287,4 +287,69 @@ function getURL() {
     
     window.history.replaceState(window.history.state, window.document.title, url);
     // window.location.search = urlParams;
+}
+
+function getHVL() {
+    airKerma2 = output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3);
+    aluminumFiltration = [];
+    idxAl = data["dataMu"][0].indexOf("Al");
+    aluminumThickness = sequence(11, 0.2);
+    for (mmAl in aluminumThickness) {
+        filteredSpectrum = [];
+        output["mGy"].forEach(function (ed, i) {
+            filteredSpectrum.push(ed*Math.exp(-data["dataMu"][i+1][idxAl]*aluminumThickness[mmAl]))
+        });
+        totalAirKerma = filteredSpectrum.reduce((partialSum, a) => partialSum + a, 0);
+        if(aluminumThickness[mmAl]==0)
+            aluminumFiltration.push(totalAirKerma);
+        else
+            aluminumFiltration.push(Math.log(totalAirKerma/aluminumFiltration[0]));
+    }
+    aluminumFiltration[0] = 0;
+
+    fit = Polyfit(aluminumFiltration,sequence(11,0.2)).getPolynomial(2);
+
+    hvl = "N/A";
+    if (aluminumFiltration[aluminumFiltration.length - 1] < 0.6) {
+        hvl=fit(Math.log(.5));
+    }
+
+    return hvl;
+}
+
+const regress = (x, y) => {
+    const n = y.length;
+    let sx = 0;
+    let sy = 0;
+    let sxy = 0;
+    let sxx = 0;
+    let syy = 0;
+    for (let i = 0; i < n; i++) {
+        sx += x[i];
+        sy += y[i];
+        sxy += x[i] * y[i];
+        sxx += x[i] * x[i];
+        syy += y[i] * y[i];
+    }
+    const mx = sx / n;
+    const my = sy / n;
+    const yy = n * syy - sy * sy;
+    const xx = n * sxx - sx * sx;
+    const xy = n * sxy - sx * sy;
+    const slope = xy / xx;
+    const intercept = my - slope * mx;
+    const r = xy / Math.sqrt(xx * yy);
+    const r2 = Math.pow(r,2);
+    let sst = 0;
+    for (let i = 0; i < n; i++) {
+       sst += Math.pow((y[i] - my), 2);
+    }
+    const sse = sst - r2 * sst;
+    const see = Math.sqrt(sse / (n - 2));
+    const ssr = sst - sse;
+    return {slope, intercept, r, r2, sse, ssr, sst, sy, sx, see};
+}
+
+function sequence(len, max) {
+    return Array.from({length: len}, (v, k) => (k * max / (len - 1)));
 }
