@@ -15,8 +15,8 @@
 <body>
     <div id="content">
         <div id="title">
-            <h1>Spectrum calculator</h1>
-            <div style="font-size:100%;line-height: normal; float:right">Data from <a
+            <h1>MC-GPU Spectrum calculator</h1>
+            <div style="font-size:100%;line-height: normal; float:right">Data and calculations from <a
                     href="https://aapm.onlinelibrary.wiley.com/doi/full/10.1002/mp.12222" target="_blank">Hernandez et
                     al (2017) Med. Phys.</a></div>
         </div>
@@ -95,7 +95,7 @@
                                 <option value="Tungsten" selected="selected">Tungsten</option>
                                 <!-- <option value="TungstenBCT">Tungsten (BCT)</option> -->
                             </select></td>
-                        <td></td>
+                        <td><input type="button" id="reset" value="Reset"></td>
                     </tr>
                     <!-- <tr>
                     <td colspan="3"><input type="button" id="calculate" value="Calculate"></td>
@@ -110,8 +110,8 @@
 
                 </table>
             </div>
-            <div style="text-align: center;">Download: <input type="button" id="download" value=".csv"> <input
-                    type="button" id="downloadMCGPU" value=".spc" title="Spectrum file for MC-GPU"></td>
+            <div style="text-align: center; margin-top:10px;">Download: <input type="button" id="downloadMCGPU"
+                    value="MC-GPU Spectrum File"> <input type="button" id="download" value=".csv"></td>
             </div>
         </div>
         <hr>

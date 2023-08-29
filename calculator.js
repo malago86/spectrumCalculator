@@ -23,23 +23,14 @@ $(document).ready(function () {
         promises.push(req);
     }
     $.when.apply(null, promises).done(e => {
-        entries = urlParams.entries();
-        for (const entry of entries) {
-            key = entry[0];
-            val = entry[1];
-            $("#"+key).val(val);
-        }
+        fillDefaults();
         calculate();
-    })
+    });
 
     $("input").on("input", function () {
-        if ($(this).val() != "") {
-            calculate();
-            getURL();
-            // $(this).val(Number($(this).val()));
-        } else {
-            $(this).val(0);
-        }
+        calculate();
+        getURL();
+        // $(this).val(Number($(this).val()));
     })
 
     $("select").on("change", function () {
@@ -47,11 +38,28 @@ $(document).ready(function () {
         getURL();
     })
 
-    $("#calculate").click(function () {
+    $("#reset").click(function () {
+        urlParams = new URLSearchParams();
+        $(".inherent").each(function (i, e) {
+            $(e).val(0);
+        });
+        $(".additional").each(function (i, e) {
+            $(e).val(0);
+        });
         calculate();
+        window.history.replaceState(window.history.state, window.document.title, window.location.origin + window.location.pathname);
     });
     
 })
+
+function fillDefaults() {
+    entries = urlParams.entries();
+    for (const entry of entries) {
+        key = entry[0];
+        val = entry[1];
+        $("#" + key).val(val);
+    }
+}
 
 function calculate() {
     output = {
@@ -71,7 +79,7 @@ function calculate() {
         idx = data["dataMu"][0].indexOf(material);
         k = [];
         data["dataMu"].forEach(function (ed) {
-            k.push(Math.exp(-ed[idx] * e.value));
+            k.push(Math.exp(-ed[idx] * e.value?e.value:0));
         });
         inherent.push(k.slice(1));
     });
@@ -81,7 +89,7 @@ function calculate() {
         idx = data["dataMu"][0].indexOf(material);
         k = [];
         data["dataMu"].forEach(function (ed) {
-            k.push(Math.exp(-ed[idx] * e.value));
+            k.push(Math.exp(-ed[idx] * e.value?e.value:0));
         });
         additional.push(k.slice(1));
     });
@@ -190,7 +198,7 @@ function calculate() {
         });
 
         // outputMCGPU = outputMCGPU.slice(0, outputMCGPU.length - 1); // remove last \n
-        outputMCGPU+=(lastkeV+binSize)*1000+" -1"
+        outputMCGPU+=(lastkeV+binSize*2)*1000+" -1"
         download(outputMCGPU, getFileName()+".spc");
     })
 };
