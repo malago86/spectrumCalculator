@@ -3,6 +3,7 @@ var dataFiles = ["dataMu", "dataAirKerma", "dataMolybdenum", "dataRhodium", "dat
 var symbols={"Tungsten":"W","Molybdenum":"Mo","Rhodium":"Rh"};
 var wto = null;
 var downloadData = "";
+var binSize = 0.25;
 $(document).ready(function () {
     promises = []
     for (f in dataFiles) {
@@ -165,13 +166,17 @@ function calculate() {
 #  Energy [eV]    Num. photons/(mm^2*keV)
 # ----------------------------------------------------
 `
+        lastkeV = -1;
         output["keV"].forEach(function (e, i) {
-            if (output["fluence"][i] != 0) {
-                ph = i==output["keV"].length-1 || output["fluence"][i+1] == 0 ? -output["fluence"][i]: output["fluence"][i];
-                outputMCGPU += (output["keV"][i] * 1000) + " " + String((ph/output["keV"][i]).toFixed(3)).padStart(10) + "\n";
+            if (output["fluence"][i] >= 1) {
+                fluence = output["fluence"][i];
+                lastkeV = (output["keV"][i]-binSize);
+                outputMCGPU += (lastkeV* 1000) + " " + String((fluence / output["keV"][i]).toFixed(3)).padStart(10) + "\n";
             }
         });
-        outputMCGPU = outputMCGPU.slice(0, outputMCGPU.length - 1); // remove last \n
+
+        // outputMCGPU = outputMCGPU.slice(0, outputMCGPU.length - 1); // remove last \n
+        outputMCGPU+=(lastkeV+binSize)*1000+" -1"
         download(outputMCGPU, getFileName()+".spc");
     })
 };
@@ -186,7 +191,7 @@ function generateTable(data) {
     outputTable += "</table>";
 
     outputTable += "<table><thead><tr>";
-    downloadData=[Object.keys(data).join(",")];
+    downloadData=[Object.keys(data).join(",")+",fluence/keV"];
     for (key in data) {
         outputTable += "<th>" + key + "</th>";
     }
@@ -195,11 +200,19 @@ function generateTable(data) {
         outputTable += "<tr>";
         r = [];
         for (key in data) {
-            outputTable += "<td>" + Number(data[key][i]).toPrecision(3) + "</td>";
+            d = Number(data[key][i]);
+            if (key == "keV")
+                d -= binSize;
+            outputTable += "<td>" + d.toPrecision(3) + "</td>";
             r.push(Number(data[key][i]));
         }
+        //add one more field for num photons/(mm^2*keV)
+        r.push(data["fluence"][i] / data["keV"][i]);
+
         outputTable += "</tr>";
-        downloadData.push(r.join(","))
+        if (data["fluence"][i] >= 1) {
+            downloadData.push(r.join(","))
+        }
     });
 
     outputTable += "</table>";
