@@ -71,7 +71,7 @@ function calculate() {
         "fluence": [],
         "mGy2":[]
     }
-    kVp = $("#kVp").val();
+    kVp = String(Number($("#kVp").val()));
     airKerma = $("#airKerma").val();
     inherent = [];
     $(".inherent").each(function (i, e) {
