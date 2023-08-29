@@ -209,7 +209,7 @@ function generateTable(data) {
     outputTable += "<tr><th width='50%'>Total fluence (photons/mm²)</th><td>" + output["normFluence"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
     outputTable += "<tr><th>Air Kerma (mGy)</th><td>" + output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
     outputTable += "<tr><th>Avg. Energy (keV)</th><td>" + (output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0) / output["normFluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3) + "</td></tr>";
-    outputTable += "<tr><th>HVL (mm Al)</th><td>"+getHVL().toPrecision(3)+"</td></tr>";
+    outputTable += "<tr><th>HVL (mm Al)</th><td>"+getHVL()+"</td></tr>";
     //<th>Air Kerma (mGy)</th><th>HVL (mm Al)</th><th>Avg. Energy (keV)</th><th>Eff. Energy (keV)</th>
     outputTable += "</table>";
 
@@ -293,7 +293,7 @@ function getHVL() {
     airKerma2 = output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3);
     aluminumFiltration = [];
     idxAl = data["dataMu"][0].indexOf("Al");
-    aluminumThickness = sequence(11, 0.2);
+    aluminumThickness = sequence(80, 1.6);
     for (mmAl in aluminumThickness) {
         filteredSpectrum = [];
         output["mGy"].forEach(function (ed, i) {
@@ -307,12 +307,14 @@ function getHVL() {
     }
     aluminumFiltration[0] = 0;
 
-    fit = Polyfit(aluminumFiltration,sequence(11,0.2)).getPolynomial(2);
+    fit = Polyfit(aluminumFiltration,sequence(80,1.6)).getPolynomial(2);
 
     hvl = "N/A";
-    if (aluminumFiltration[aluminumFiltration.length - 1] < 0.6) {
-        hvl=fit(Math.log(.5));
-    }
+    // if (aluminumFiltration[aluminumFiltration.length - 1] < Math.log(0.6)) {
+        hvl=fit(Math.log(.5)).toPrecision(3);
+    // } else {
+    //     hvl = "Stage 2";
+    // }
 
     return hvl;
 }
