@@ -132,12 +132,12 @@ function calculate() {
         Plotly.newPlot("plot", [{
             x: output["keV"],
             y: output["normFluence"],
-            name:"Normalized Fluence"
+            name:"Inherent Fluence"
         },
         {
             x: output["keV"],
             y: output["fluence"],
-            name:"Fluence"
+            name:"Filtered Fluence"
         }],
             {
                 height: 350,
@@ -213,20 +213,25 @@ function generateTable(data) {
     //<th>Air Kerma (mGy)</th><th>HVL (mm Al)</th><th>Avg. Energy (keV)</th><th>Eff. Energy (keV)</th>
     outputTable += "</table>";
 
-    outputTable += "<table><thead><tr>";
+    showColumns = { "keV": "keV", "normFluence": "Inherent Fluence", "fluence": "Filtered Fluence" }
+
+    outputTable += "<table style='width:100%'><thead><tr>";
     downloadData=[Object.keys(data).join(",")+",fluence/keV"];
-    for (key in data) {
-        outputTable += "<th>" + key + "</th>";
+    for (key in showColumns) {
+        outputTable += "<th>" + showColumns[key] + "</th>";
     }
     outputTable += "</tr></thead>";
     data["keV"].forEach(function (e,i) {
         outputTable += "<tr>";
         r = [];
-        for (key in data) {
+        for (key in showColumns) {
             d = Number(data[key][i]);
-            if (key == "keV")
+            d = d.toPrecision(5);
+            if (key == "keV") {
                 d -= binSize;
-            outputTable += "<td>" + d.toPrecision(3) + "</td>";
+                d=d.toFixed(1);
+            }
+            outputTable += "<td>" + d + "</td>";
             r.push(Number(data[key][i]));
         }
         //add one more field for num photons/(mm^2*keV)

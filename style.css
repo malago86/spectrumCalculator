@@ -78,12 +78,25 @@ th {
 
 #content {
     max-width: 1024px;
-    margin: auto
+    margin: auto;
+    border-left: solid 1px #1f77b4;
+    border-right: solid 1px #1f77b4;
+    min-height: 100%;
+}
+
+hr {
+    background-color: #1e8ad6;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
 #input {
     float: left;
     font-size: 18px;
+    width: 50%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 #input input,
@@ -91,6 +104,17 @@ th {
     font-size: 18px;
     width: 80%;
     padding: 1px;
+    text-align: center;
+}
+
+#input input[type=number] {
+    width: 80px;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    opacity: .5;
+    margin-left: -4px;
 }
 
 #input table td {
@@ -107,10 +131,13 @@ input[type=button] {
     text-transform: uppercase;
 }
 
+
 #output {
     float: left;
     height: 400px;
-    margin-left: 5px
+    padding-left: 5px;
+    padding-right: 5px;
+    width: 50%;
 }
 
 #output #table {
