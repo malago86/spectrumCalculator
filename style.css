@@ -9,7 +9,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     line-height: 1.75em;
     font-size: 16px;
-    background-color: #222;
+    background-color: #111;
     color: white;
     margin: 0;
 }
@@ -76,12 +76,17 @@ th {
     letter-spacing: 2%;
 }
 
+p {
+    margin: 5px;
+}
+
 #content {
     max-width: 1024px;
     margin: auto;
     border-left: solid 1px #1f77b4;
     border-right: solid 1px #1f77b4;
     min-height: 100%;
+    background-color: #222;
 }
 
 hr {

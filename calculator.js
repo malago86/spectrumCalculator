@@ -206,9 +206,9 @@ function calculate() {
 
 function generateTable(data) {
     outputTable = "<table style='width:100%'>";
-    outputTable += "<tr><th width='50%'>Total fluence (photons/mm²)</th><td>" + output["normFluence"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
+    outputTable += "<tr><th width='50%'>Total fluence (photons/mm²)</th><td>" + output["fluence"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
     outputTable += "<tr><th>Air Kerma (mGy)</th><td>" + output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3) + "</td></tr>";
-    outputTable += "<tr><th>Avg. Energy (keV)</th><td>" + (output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0) / output["normFluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3) + "</td></tr>";
+    outputTable += "<tr><th>Avg. Energy (keV)</th><td>" + (output["meanEnergy"].reduce((partialSum, a) => partialSum + a, 0) / output["fluence"].reduce((partialSum, a) => partialSum + a, 0)).toPrecision(3) + "</td></tr>";
     outputTable += "<tr><th>HVL (mm Al)</th><td>"+getHVL()+"</td></tr>";
     //<th>Air Kerma (mGy)</th><th>HVL (mm Al)</th><th>Avg. Energy (keV)</th><th>Eff. Energy (keV)</th>
     outputTable += "</table>";
@@ -295,13 +295,12 @@ function getURL() {
 }
 
 function getHVL() {
-    airKerma2 = output["mGy2"].reduce((partialSum, a) => partialSum + a, 0).toPrecision(3);
     aluminumFiltration = [];
     idxAl = data["dataMu"][0].indexOf("Al");
     aluminumThickness = sequence(80, 1.6);
     for (mmAl in aluminumThickness) {
         filteredSpectrum = [];
-        output["mGy"].forEach(function (ed, i) {
+        output["mGy2"].forEach(function (ed, i) {
             filteredSpectrum.push(ed*Math.exp(-data["dataMu"][i+1][idxAl]*aluminumThickness[mmAl]))
         });
         totalAirKerma = filteredSpectrum.reduce((partialSum, a) => partialSum + a, 0);
