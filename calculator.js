@@ -1,5 +1,5 @@
 var data = {};
-var dataFiles = ["dataMu", "dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
+var dataFiles = ["dataMu17", "dataMu78","dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
 var symbols={"Tungsten":"W","Molybdenum":"Mo","Rhodium":"Rh"};
 var wto = null;
 var downloadData = "";
@@ -23,14 +23,32 @@ $(document).ready(function () {
         promises.push(req);
     }
     $.when.apply(null, promises).done(e => {
+        if (urlParams.get("data-source") != null) {
+            $("input[type=radio][name=data-source]").prop("checked", false);
+            $("input[type=radio][name=data-source][value=" + urlParams.get("data-source") + "]").prop("checked", true);
+        }
+        reset($('input[name="data-source"]:checked').val());
         fillDefaults();
         calculate();
     });
+    
+    $("input[type=radio][name=data-source]").on("change", function () {
+        reset($('input[name="data-source"]:checked').val());
+        $("#input table.tg tbody tr").remove();
+        urlParams = new URLSearchParams();
+        window.history.replaceState(window.history.state, window.document.title, window.location.origin + window.location.pathname);
+    })
 
-    $("input").on("input", function () {
+    $("body").on("change","input", function () {
         calculate();
         getURL();
         // $(this).val(Number($(this).val()));
+    })
+
+    $("#material-options").on("change", function () {
+        addFilter($(this).val());
+        $(this).val("Add filter");
+        return false;
     })
 
     $("select").on("change", function () {
@@ -39,22 +57,54 @@ $(document).ready(function () {
     })
 
     $("#reset").click(function () {
+        reset($('input[name="data-source"]:checked').val());
+        $("#input table.tg tbody tr").remove();
         urlParams = new URLSearchParams();
-        $(".inherent").each(function (i, e) {
-            $(e).val(0);
-        });
-        $(".additional").each(function (i, e) {
-            $(e).val(0);
-        });
-        calculate();
         window.history.replaceState(window.history.state, window.document.title, window.location.origin + window.location.pathname);
-    });
-    
+    });    
 })
+
+function reset(dataSource="17") {
+    $(".inherent").each(function (i, e) {
+        $(e).val(0);
+    });
+    $(".additional").each(function (i, e) {
+        $(e).val(0);
+    });
+
+    $("#material-options option").remove();
+    $("#material-options").append($("<option>", {
+        value: "Add filter",
+        text: "Add filter"
+    }));
+
+    data["dataMu"] = data["dataMu" + dataSource];
+    
+    $.each(data["dataMu"][0].slice(1), function (idx, e) {
+        $("#material-options").append($("<option>", {
+            value: e,
+            text: e
+        }));
+    });
+
+    calculate();
+}
+
+function addFilter(element) {
+    $("#input table.tg tbody").append('<tr> \
+                <td>'+element+'</td> \
+                <td><input type="number" class="inherent" id="'+element+'-1" value="0" step="0.05" min="0"></td> \
+                <td><input type="number" class="additional" id="'+element+'-2" value="0" step="0.05" min="0"></td> \
+            </tr>');
+}
 
 function fillDefaults() {
     entries = urlParams.entries();
     for (const entry of entries) {
+        if (entry[0] == "data-source") {
+        }
+        else if($("#" + entry[0]).length == 0)
+            addFilter(entry[0].split("-")[0]);
         key = entry[0];
         val = entry[1];
         $("#" + key).val(val);
@@ -282,12 +332,17 @@ function download(content, filename)
 function getURL() {
     urlParams = new URLSearchParams();
     $("input").each(function (i, e) {
-        if (!isNaN(e.value) && e.value != 0)
-            urlParams.set(e.id,Number(e.value));
+        if(e.name!="data-source")
+            if (!isNaN(e.value) && e.value != 0)
+                urlParams.set(e.id,Number(e.value));
     });
     $("select").each(function (i, e) {
-        urlParams.set(e.id,$(e).find(":selected").val());
+        if(e.id!="material-options")
+            urlParams.set(e.id,$(e).find(":selected").val());
     });
+
+    urlParams.set("data-source",$('input[name="data-source"]:checked').val());
+
     let url = window.location.origin + window.location.pathname + '?' + encodeURI(urlParams);
     
     window.history.replaceState(window.history.state, window.document.title, url);

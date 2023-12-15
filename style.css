@@ -76,6 +76,31 @@ th {
     letter-spacing: 2%;
 }
 
+table.tg {
+    display: block;
+    height: 250px;
+}
+
+table.tg tbody {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+}
+
+table.tg tbody tr,
+table.tg thead tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.tgb {
+    position: absolute;
+    bottom: 0;
+    background-color: #555555;
+}
+
 p {
     margin: 5px;
 }
@@ -102,6 +127,8 @@ hr {
     width: 50%;
     padding-left: 5px;
     padding-right: 5px;
+    height: 400px;
+    position: relative;
 }
 
 #input input,
