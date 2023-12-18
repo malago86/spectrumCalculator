@@ -62,6 +62,20 @@ $(document).ready(function () {
         urlParams = new URLSearchParams();
         window.history.replaceState(window.history.state, window.document.title, window.location.origin + window.location.pathname);
     });    
+
+    $("#share").click(function () {
+        var copyText = window.location.origin + window.location.pathname + '?' + encodeURI(urlParams);
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText);
+
+        // Alert the copied text
+        $("#share #share-tooltip").text("Copied to clipboard!");
+
+        setTimeout(function () {
+            $("#share #share-tooltip").text("Share model");
+        },5000)
+    });
 })
 
 function reset(dataSource="17") {
@@ -320,7 +334,7 @@ function getFileName() {
 function download(content, filename)
 {
     contentType = 'application/octet-stream';
-    data = "";
+    // dataDownload = "";
 
     var a = document.createElement('a');
     var blob = new Blob([content], {'type':contentType});

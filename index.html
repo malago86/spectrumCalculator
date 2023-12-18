@@ -9,6 +9,7 @@
     <script src="https://cdn.plot.ly/plotly-2.25.2.min.js" charset="utf-8"></script>
     <script src="polyfit.js"></script>
     <script src="calculator.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <meta name="color-scheme" content="only dark" />
 </head>
@@ -56,7 +57,8 @@
                     <tr>
                         <td>Air Kerma (mGy)</td>
                         <td><input type="number" id="airKerma" value="1.0" step="0.05" min="0"></td>
-                        <td></td>
+                        <td>
+                        </td>
                     </tr>
                     <tr>
                         <td>Anode Material</td>
@@ -66,7 +68,16 @@
                                 <option value="Tungsten" selected="selected">Tungsten</option>
                                 <!-- <option value="TungstenBCT">Tungsten (BCT)</option> -->
                             </select></td>
-                        <td><input type="button" id="reset" value="Reset"></td>
+                        <td>
+                            <div class="button tooltip" title="Share" id="share">
+                                <span class="tooltiptext" id="share-tooltip">Share model</span><i
+                                    class="fa-solid fa-share-nodes"></i>
+                            </div>
+                            <div class="button tooltip" title="Reset" id="reset">
+                                <span class="tooltiptext" id="share-tooltip">Reset</span><i
+                                    class="fa-solid fa-square-xmark"></i>
+                            </div>
+                        </td>
                     </tr>
                     <!-- <tr>
                     <td colspan="3"><input type="button" id="calculate" value="Calculate"></td>
