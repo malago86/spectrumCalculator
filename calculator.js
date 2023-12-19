@@ -1,5 +1,5 @@
 var data = {};
-var dataFiles = ["dataMu17", "dataMu78","dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
+var dataFiles = ["dataMu17", "dataMu78","dataMuNist","dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
 var symbols={"Tungsten":"W","Molybdenum":"Mo","Rhodium":"Rh"};
 var wto = null;
 var downloadData = "";
@@ -16,7 +16,6 @@ $(document).ready(function () {
             dataType: "text",
             name: dataFiles[f],
             success: function (response, st) {
-                // console.log(this);
                 data[this.name] = $.csv.toArrays(response);
             }
         });
@@ -25,7 +24,7 @@ $(document).ready(function () {
     $.when.apply(null, promises).done(e => {
         if (urlParams.get("data-source") != null) {
             $("input[type=radio][name=data-source]").prop("checked", false);
-            $("input[type=radio][name=data-source][value=" + urlParams.get("data-source") + "]").prop("checked", true);
+            $("input[type=radio][name=data-source][value='" + urlParams.get("data-source") + "']").prop("checked", true);
         }
         reset($('input[name="data-source"]:checked').val());
         fillDefaults();
@@ -91,7 +90,7 @@ function reset(dataSource="17") {
         value: "Add filter",
         text: "Add filter"
     }));
-
+    
     data["dataMu"] = data["dataMu" + dataSource];
     
     $.each(data["dataMu"][0].slice(1), function (idx, e) {
