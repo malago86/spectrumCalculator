@@ -285,24 +285,24 @@ function generateTable(data) {
         outputTable += "<th>" + showColumns[key] + "</th>";
     }
     outputTable += "</tr></thead>";
-    data["keV"].forEach(function (e,i) {
-        outputTable += "<tr>";
-        r = [];
-        for (key in showColumns) {
-            d = Number(data[key][i]);
-            d = d.toPrecision(5);
-            if (key == "keV") {
-                d -= binSize;
-                d=d.toFixed(1);
+    data["keV"].forEach(function (e, i) {
+        if (i >= 8) {
+            outputTable += "<tr>";
+            r = [];
+            for (key in showColumns) {
+                d = Number(data[key][i]);
+                d = d.toPrecision(5);
+                if (key == "keV") {
+                    d -= binSize;
+                    d = d.toFixed(1);
+                }
+                outputTable += "<td>" + d + "</td>";
+                r.push(Number(data[key][i]));
             }
-            outputTable += "<td>" + d + "</td>";
-            r.push(Number(data[key][i]));
-        }
-        //add one more field for num photons/(mm^2*keV)
-        r.push(data["fluence"][i] / data["keV"][i]);
+            //add one more field for num photons/(mm^2*keV)
+            r.push(data["fluence"][i] / data["keV"][i]);
 
-        outputTable += "</tr>";
-        if (data["fluence"][i] >= 1) {
+            outputTable += "</tr>";
             downloadData.push(r.join(","))
         }
     });
