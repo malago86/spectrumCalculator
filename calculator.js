@@ -363,30 +363,26 @@ function getURL() {
 }
 
 function getHVL() {
-    aluminumFiltration = [];
+    aluminiumFiltration = [];
     idxAl = data["dataMu"][0].indexOf("Al");
-    aluminumThickness = sequence(80, 1.6);
-    for (mmAl in aluminumThickness) {
+    aluminiumThickness = sequence(80, 1.6);
+    for (mmAl in aluminiumThickness) {
         filteredSpectrum = [];
         output["mGy2"].forEach(function (ed, i) {
-            filteredSpectrum.push(ed*Math.exp(-data["dataMu"][i+1][idxAl]*aluminumThickness[mmAl]))
+            filteredSpectrum.push(ed*Math.exp(-data["dataMu"][i+1][idxAl]*aluminiumThickness[mmAl]))
         });
         totalAirKerma = filteredSpectrum.reduce((partialSum, a) => partialSum + a, 0);
-        if(aluminumThickness[mmAl]==0)
-            aluminumFiltration.push(totalAirKerma);
+        if(aluminiumThickness[mmAl]==0)
+            aluminiumFiltration.push(totalAirKerma);
         else
-            aluminumFiltration.push(Math.log(totalAirKerma/aluminumFiltration[0]));
+            aluminiumFiltration.push(Math.log(totalAirKerma/aluminiumFiltration[0]));
     }
-    aluminumFiltration[0] = 0;
+    aluminiumFiltration[0] = 0;
 
-    fit = Polyfit(aluminumFiltration,sequence(80,1.6)).getPolynomial(2);
+    fit = Polyfit(aluminiumFiltration,sequence(80,1.6)).getPolynomial(2);
 
     hvl = "N/A";
-    // if (aluminumFiltration[aluminumFiltration.length - 1] < Math.log(0.6)) {
-        hvl=fit(Math.log(.5)).toPrecision(3);
-    // } else {
-    //     hvl = "Stage 2";
-    // }
+    hvl=fit(Math.log(.5)).toPrecision(3);
 
     return hvl;
 }
