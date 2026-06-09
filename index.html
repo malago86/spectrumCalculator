@@ -1,106 +1,13 @@
-<head>
-    <title>Spencer: X-Ray Spectrum Calculator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
-        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.plot.ly/plotly-2.25.2.min.js" charset="utf-8"></script>
-    <script src="polyfit.js"></script>
-    <script src="calculator.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <meta name="color-scheme" content="only dark" />
-</head>
-
-<body>
-    <div id="content">
-        <div id="title">
-            <h1>Spencer: X-Ray Spectrum Calculator</h1>
-
-            <div style="font-size:100%;line-height: normal; float:right; width:50%">
-                Data and calculations from:<br>
-                <input type="radio" id="data-source17" name="data-source" value="17" checked><label
-                    for="data-source17">Hernandez et al (2017) Med. Phys. <a
-                        href="https://aapm.onlinelibrary.wiley.com/doi/full/10.1002/mp.12222"
-                        target="_blank">[source]</a></label><br>
-                <input type="radio" id="data-source78" name="data-source" value="78"><label for="data-source78">Report
-                    78 <a href="https://iopscience.iop.org/article/10.1088/0952-4746/18/1/026/meta"
-                        target="_blank">[source]</a></label><br>
-                <input type="radio" id="data-sourceNist" name="data-source" value="Nist"><label
-                    for="data-sourceNist">NIST
-                    X-Ray Tables <a href="https://physics.nist.gov/PhysRefData/FFast/html/form.html"
-                        target="_blank">[source]</a></label>
-            </div>
-        </div>
-        <p>Effective anode angle: 22.4º. Inherent filtration: 0.77 mm Be.</p>
-
-        <div id="input">
-            <table class="tg">
-                <thead>
-                    <tr>
-                        <th width="33%">Material<br>
-                            <select id="material-options">
-                            </select>
-                        </th>
-                        <th>Inherent Filter Thickness (mm)</th>
-                        <th>Added Filter Thickness (mm)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <table class="tgb">
-                <tbody>
-                    <tr>
-                        <td>Tube Potential (kV)</td>
-                        <td><input type="number" id="kVp" value="29" min="20" max="49"></td>
-                        <td>Range: 20-49</td>
-                    </tr>
-                    <tr>
-                        <td>Air Kerma (mGy)</td>
-                        <td><input type="number" id="airKerma" value="1.0" step="0.05" min="0"></td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Anode Material</td>
-                        <td><select id="anodeMaterial" name="anodeMaterial">
-                                <option value="Molybdenum">Molybdenum</option>
-                                <option value="Rhodium">Rhodium</option>
-                                <option value="Tungsten" selected="selected">Tungsten</option>
-                                <!-- <option value="TungstenBCT">Tungsten (BCT)</option> -->
-                            </select></td>
-                        <td>
-                            <div class="button tooltip" title="Share" id="share">
-                                <span class="tooltiptext" id="share-tooltip">Share model</span><i
-                                    class="fa-solid fa-share-nodes"></i>
-                            </div>
-                            <div class="button tooltip" title="Reset" id="reset">
-                                <span class="tooltiptext" id="share-tooltip">Reset</span><i
-                                    class="fa-solid fa-square-xmark"></i>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- <tr>
-                    <td colspan="3"><input type="button" id="calculate" value="Calculate"></td>
-                </tr> -->
-                </tbody>
-            </table>
-        </div>
-
-        <div id="output">
-            <div id="table">
-                <table>
-
-                </table>
-            </div>
-            <div style="text-align: center; margin-top:10px;">Download: <input type="button" id="downloadMCGPU"
-                    value="MC-GPU Spectrum File"> <input type="button" id="download" value=".csv"></td>
-            </div>
-        </div>
-        <hr>
-        <div id="plot"></div>
-    </div>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>spectrumcalculator</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

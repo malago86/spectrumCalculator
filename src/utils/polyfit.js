@@ -1,4 +1,4 @@
-Polyfit = (function () {
+const Polyfit = (function () {
     /**
      * Polyfit
      * @constructor
@@ -274,3 +274,5 @@ Polyfit = (function () {
     };
     return Polyfit;
 })();
+
+export default Polyfit;
