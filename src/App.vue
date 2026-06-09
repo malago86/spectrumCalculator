@@ -196,7 +196,7 @@ const loadData = async () => {
   const dataFiles = ["dataMu17", "dataMu78", "dataMuNist", "dataAirKerma", "dataMolybdenum", "dataRhodium", "dataTungsten"];
   try {
     const promises = dataFiles.map(async (file) => {
-      const response = await fetch(`/data/${file}.csv`);
+      const response = await fetch(`./data/${file}.csv`);
       const text = await response.text();
       rawData[file] = parseCSV(text);
     });
