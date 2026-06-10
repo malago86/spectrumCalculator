@@ -50,20 +50,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(filter, index) in filters" :key="index">
-                <td>{{ filter.material }}</td>
-                <td>
-                  <input type="number" v-model.number="filter.inherent" step="0.05" min="0">
-                </td>
-                <td>
-                  <input type="number" v-model.number="filter.additional" step="0.05" min="0">
-                </td>
-                <td>
-                  <button @click="removeFilter(index)" class="btn btn-danger btn-icon">
-                    <i class="mdi mdi-trash-can"></i>
-                  </button>
-                </td>
-              </tr>
+<tr v-for="(filter, index) in filters" :key="index" :class="{ 'disabled-row': filter.disabled }">
+  <td :class="{ 'text-muted': filter.disabled }">
+    {{ filter.material }} 
+    <i v-if="filter.disabled" class="mdi mdi-alert-circle-outline" title="Material not available in current data source" style="font-size: 0.9rem; margin-left: 4px;"></i>
+  </td>
+  <td>
+    <input type="number" v-model.number="filter.inherent" step="0.01" min="0" :disabled="filter.disabled">
+  </td>
+  <td>
+    <input type="number" v-model.number="filter.additional" step="0.01" min="0" :disabled="filter.disabled">
+  </td>
+  <td>
+    <button @click="removeFilter(index)" class="btn btn-danger btn-icon">
+      <i class="mdi mdi-trash-can"></i>
+    </button>
+  </td>
+</tr>
             </tbody>
           </table>
 
@@ -237,15 +240,19 @@ const calculate = () => {
   const kvpStr = String(Number(kVp.value));
   const ak = airKerma.value;
   
-  const inherentEffects = filters.value.map(f => {
-    const idx = currentMuData[0].indexOf(f.material);
-    return currentMuData.map((row, i) => i === 0 ? 1 : Math.exp(-row[idx] * f.inherent));
-  });
+  const inherentEffects = filters.value
+    .filter(f => !f.disabled)
+    .map(f => {
+      const idx = currentMuData[0].indexOf(f.material);
+      return currentMuData.map((row, i) => i === 0 ? 1 : Math.exp(-row[idx] * f.inherent));
+    });
 
-  const additionalEffects = filters.value.map(f => {
-    const idx = currentMuData[0].indexOf(f.material);
-    return currentMuData.map((row, i) => i === 0 ? 1 : Math.exp(-row[idx] * f.additional));
-  });
+  const additionalEffects = filters.value
+    .filter(f => !f.disabled)
+    .map(f => {
+      const idx = currentMuData[0].indexOf(f.material);
+      return currentMuData.map((row, i) => i === 0 ? 1 : Math.exp(-row[idx] * f.additional));
+    });
 
   const anodeData = rawData["data" + anodeMaterial.value];
   if (!anodeData) return;
@@ -508,7 +515,12 @@ watch([dataSource, kVp, airKerma, anodeMaterial, filters], () => {
 }, { deep: true });
 
 watch(dataSource, () => {
-  filters.value = [];
+  const sourceKey = "dataMu" + dataSource.value;
+  const available = rawData[sourceKey] ? rawData[sourceKey][0].slice(1) : [];
+  
+  filters.value.forEach(f => {
+    f.disabled = !available.includes(f.material);
+  });
   updateAvailableMaterials();
 });
 </script>
